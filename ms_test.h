@@ -41,6 +41,7 @@ typedef struct s_val
 	char	*heredoc;
 	int		doc_num;
 	int		here_sig;
+	t_tokken_list	*head;
 	t_tokken_list	*cmd;
 }			t_val;
 

@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:47:34 by seojang           #+#    #+#             */
-/*   Updated: 2024/09/09 21:26:24 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/01 17:05:53 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ t_tokken_list	*ft_lstnew(char *content)
 	p = (t_tokken_list *)malloc(sizeof(t_tokken_list));
 	if (!p)
 		return (NULL);
-	p -> content = content;
-	p -> next = (NULL);
+	p->content = content;
+	p->next = (NULL);
 	return (p);
 }
 
