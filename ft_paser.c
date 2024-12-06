@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:08:50 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/01 18:57:03 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/06 15:58:00 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	ft_paser_func(t_tokken_list **tokken, t_val *val)
 	ft_find_redir(tokken, val);
 	if (val->here_sig == 1)
 		return ;
-	ft_find_cmd(*tokken, val);
 }
 
 void	ft_heredoc_change(t_tokken_list **tokken)
@@ -39,6 +38,7 @@ void	ft_heredoc_change(t_tokken_list **tokken)
 			i += 1;
 			doc_name = ft_strdup("a");
 			doc_num = ft_itoa(i);
+			free((*tokken)->next->content);
 			(*tokken)->next->content = ft_strjoin(doc_name, doc_num);
 			free(doc_num);
 			(*tokken) = (*tokken)->next;
@@ -71,7 +71,9 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 			signal(SIGINT, handler_here);
 			val.doc_num = 0;
 			if (!ft_strncmp(tokken->content, "<<", 2))
+			{
 				ft_first_heredoc(&tokken, &val);
+			}
 			else
 				ft_heredoc(&tokken, &val);
 			here_flag++;
@@ -83,6 +85,13 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 		}
 	}
 	ft_heredoc_change(&tokken);
+	// t_tokken_list *lst = tokken;
+	// int i = 0;
+	// while (lst)
+	// {
+	// 	printf("lst%d = [%s]\n", i++, lst->content);
+	// 	lst = lst->next;
+	// }
 	set_signal_int_ex();
 	while (tokken)
 	{
@@ -108,6 +117,7 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 			error("Fork error", 1);
 		else if (pid == 0)
 		{
+			ft_find_cmd(tokken, &val);
 			set_signal_int_ex();
 			printf("fd in값 {%d} fd out값 {%d} token값 {%s}\n", val.fd_in, val.fd_out, tokken->content);
 			if (prev_pipe != -1)

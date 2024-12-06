@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 20:25:40 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/01 19:20:23 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/06 15:33:27 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ void	ft_push_doc(t_tokken_list **tokken, t_val *val)
 			break ;
 		}
 		if (ft_strncmp(temp, "\n", 1))
-			temp = ft_strjoin(temp, ft_strdup("\n"));
+			temp = ft_strjoin(temp, "\n");
 		if (!ret)
 			ret = ft_strdup(temp);
 		else
-			ret = ft_strjoin(ret, ft_strdup(temp));
+			ret = ft_strjoin(ret, temp);
 		i++;
 		free(temp);
 		temp = NULL;
@@ -67,7 +67,6 @@ void	ft_push_doc(t_tokken_list **tokken, t_val *val)
 	tmpfd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	write(tmpfd, ret, ft_strlen(ret));
 	close(tmpfd);
-	//printf("{%s}\n", (*tokken)->next->next->content);
 	free((*tokken)->next->next->content);
 	(*tokken)->next->next->content = ft_strdup(file);
 	free(file);
@@ -138,7 +137,7 @@ void	ft_push_first_doc(t_tokken_list **tokken, t_val *val)
 		if (!ret)
 			ret = ft_strdup(temp);
 		else
-			ret = ft_strjoin(ret, ft_strdup(temp));
+			ret = ft_strjoin(ret, temp);
 		i++;
 		free(temp);
 		temp = NULL;
