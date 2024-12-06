@@ -11,6 +11,8 @@
 # include <sys/wait.h>
 # include <signal.h>
 
+extern int	signal_flag;
+
 typedef struct s_flag
 {
 	int	pipe;
@@ -110,30 +112,30 @@ int		ft_export_check(char *line, int i, char **envp);
 //ft_paser
 char	*store_path(char **envp);
 char	*find_path(char *argv, const char *env);
-void	ft_val_set(t_val *val);
+void	ft_val_set(t_val **val);
 void	error(char *s, int num);
 void	execute_cmd(t_tokken_list *tokken, char **envp);
-void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val);
+void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val **val);
 void	free_path(char **paths);
 
 //redir
-void	ft_redir_open(t_tokken_list *lst, t_val *val, t_tokken_list **tokken);
-void	ft_redir_out(t_tokken_list *lst, t_val *val, t_tokken_list **tokken);
-void	ft_redir_add(t_tokken_list *lst, t_val *val, t_tokken_list **tokken);
-void	ft_redir_here(t_tokken_list *lst, t_val *val, t_tokken_list **tokken);
+void	ft_redir_open(t_tokken_list *lst, t_val **val, t_tokken_list **tokken);
+void	ft_redir_out(t_tokken_list *lst, t_val **val, t_tokken_list **tokken);
+void	ft_redir_add(t_tokken_list *lst, t_val **val, t_tokken_list **tokken);
+void	ft_redir_here(t_tokken_list *lst, t_val **val, t_tokken_list **tokken);
 
-void	ft_find_cmd(t_tokken_list *tokken, t_val *val);
-void	ft_dup(t_val *val, char **envp, int *pipe);
+void	ft_find_cmd(t_tokken_list *tokken, t_val **val);
+void	ft_dup(t_val **val, char **envp, int *pipe);
 void	ft_find_pipe(t_tokken_list *tokken, t_val *val, int *pipefd);
-void	ft_find_redir(t_tokken_list **tokken, t_val *val);
+void	ft_find_redir(t_tokken_list **tokken, t_val **val);
 
 int	ft_next_pipe(t_tokken_list *tokken);
 
 //heredoc
-void	ft_heredoc(t_tokken_list **tokken, t_val *val);
-void	ft_push_doc(t_tokken_list **tokken, t_val *val);
-void	ft_first_heredoc(t_tokken_list **tokken, t_val *val);
-void	ft_push_first_doc(t_tokken_list **tokken, t_val *val);
+void	ft_heredoc(t_tokken_list **tokken, t_val **val);
+void	ft_push_doc(t_tokken_list **tokken, t_val **val);
+void	ft_first_heredoc(t_tokken_list **tokken, t_val **val);
+void	ft_push_first_doc(t_tokken_list **tokken, t_val **val);
 
 //ft_itoa
 char	*ft_itoa(int n);

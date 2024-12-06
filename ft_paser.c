@@ -6,18 +6,18 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:08:50 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/06 16:57:26 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/07 02:53:07 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_test.h"
 
-void	ft_paser_func(t_tokken_list **tokken, t_val *val)
+void	ft_paser_func(t_tokken_list **tokken, t_val **val)
 {
 	ft_val_set(val);
 	//ft_find_pipe(*tokken, val, pipefd);
 	ft_find_redir(tokken, val);
-	if (val->here_sig == 1)
+	if ((*val)->here_sig == 1)
 		return ;
 }
 
@@ -50,7 +50,7 @@ void	ft_heredoc_change(t_tokken_list **tokken)
 	*tokken = head;
 }
 
-void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val)
+void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val **val)
 {
 	pid_t	pid;
 	pid_t	pid_here;
@@ -68,7 +68,7 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val)
 		{
 			set_signal_int_ex();
 			signal(SIGINT, handler_here);
-			val->doc_num = 0;
+			(*val)->doc_num = 0;
 			if (!ft_strncmp(tokken->content, "<<", 2))
 			{
 				ft_first_heredoc(&tokken, val);
@@ -80,9 +80,26 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val)
 		}
 		else
 		{
-			wait(NULL);
+			signal(SIGINT, handler_int);
+			waitpid(pid_here, &status, 0);
+			int	i = 0;
+			if (WIFEXITED(status))
+			{  // 정상 종료 여부 확인
+				i = WEXITSTATUS(status);
+				if (i == 1 && signal_flag == 2)
+					i = 130;
+				else if (i == 1)
+					i = 127;
+				signal_flag = 0;
+				(*val)->exit_code = i;
+			}
+			else
+				printf("Child terminated in an unknown way\n");
+			//printf("here1{%d}", (*val)->exit_code);
 		}
 	}
+	if ((*val)->exit_code == 130)
+		return ;
 	ft_heredoc_change(&tokken);
 	// t_tokken_list *lst = tokken;
 	// int i = 0;
@@ -118,7 +135,7 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val)
 		{
 			ft_find_cmd(tokken, val);
 			set_signal_int_ex();
-			printf("fd in값 {%d} fd out값 {%d} token값 {%s}\n", val->fd_in, val->fd_out, tokken->content);
+			printf("fd in값 {%d} fd out값 {%d} token값 {%s}\n", (*val)->fd_in, (*val)->fd_out, tokken->content);
 			if (prev_pipe != -1)
 			{
 				dup2(prev_pipe, STDIN_FILENO);
@@ -141,7 +158,29 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val)
 			if (pipefd[1] != -1)
 				close(pipefd[1]);
 			prev_pipe = pipefd[0];
-			val->cmd = NULL; //cmd 초기화
+			(*val)->cmd = NULL; //cmd 초기화
+			waitpid(pid, &status, 0);
+			int	i = 0;
+			if (WIFEXITED(status))
+			{  // 정상 종료 여부 확인
+				i = WEXITSTATUS(status);
+				if (i == 1 && signal_flag == 1)
+					i = 130;
+				else if (i == 1 && signal_flag == 2)
+					i = 131;
+				else if (i == 1)
+					i = 127;
+				signal_flag = 0;
+				(*val)->exit_code = i;
+			}
+			else if (WIFSIGNALED(status))
+			{  // 시그널로 종료되었는지 확인
+				(*val)->exit_code = WTERMSIG(status) + 128;
+			//	printf("Child terminated by signal: %d\n", i);
+			}
+			else
+				printf("Child terminated in an unknown way\n");
+			//printf("here1{%d}", (*val)->exit_code);
 		}
 		while (tokken && tokken->content && ft_strncmp(tokken->content, "|", 1) != 0)
 		{
@@ -152,5 +191,6 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val)
 	}
 	if (prev_pipe != -1)
 		close(prev_pipe);
-	while (wait(&status) > 0);
+	//while (wait(&status) > 0);
+	//printf("here2{%d}", (*val)->exit_code);
 }

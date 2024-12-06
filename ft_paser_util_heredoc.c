@@ -6,13 +6,13 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 20:25:40 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/06 15:33:27 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/07 02:20:42 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_test.h"
 
-void	ft_push_doc(t_tokken_list **tokken, t_val *val)
+void	ft_push_doc(t_tokken_list **tokken, t_val **val)
 {
 	//char	*prev_cmd;
 	char	*eof;
@@ -25,9 +25,9 @@ void	ft_push_doc(t_tokken_list **tokken, t_val *val)
 	int		i;
 
 	i = 0;
-	val->doc_num += 1;
+	(*val)->doc_num += 1;
 	doc_name = ft_strdup("a");
-	doc_num = ft_itoa(val->doc_num);
+	doc_num = ft_itoa((*val)->doc_num);
 	doc_name = ft_strjoin(doc_name, doc_num);
 	free(doc_num);
 	file = ft_strdup(doc_name);
@@ -75,7 +75,7 @@ void	ft_push_doc(t_tokken_list **tokken, t_val *val)
 	free(doc_name);
 }
 
-void	ft_heredoc(t_tokken_list **tokken, t_val *val)
+void	ft_heredoc(t_tokken_list **tokken, t_val **val)
 {
 	t_tokken_list	*head;
 
@@ -90,7 +90,7 @@ void	ft_heredoc(t_tokken_list **tokken, t_val *val)
 	(*tokken) = head;
 }
 
-void	ft_push_first_doc(t_tokken_list **tokken, t_val *val)
+void	ft_push_first_doc(t_tokken_list **tokken, t_val **val)
 {
 	//char	*prev_cmd;
 	char	*eof;
@@ -103,9 +103,9 @@ void	ft_push_first_doc(t_tokken_list **tokken, t_val *val)
 	int		i;
 
 	i = 0;
-	val->doc_num += 1;
+	(*val)->doc_num += 1;
 	doc_name = ft_strdup("a");
-	doc_num = ft_itoa(val->doc_num);
+	doc_num = ft_itoa((*val)->doc_num);
 	doc_name = ft_strjoin(doc_name, doc_num);
 	free(doc_num);
 	file = ft_strdup(doc_name);
@@ -153,7 +153,7 @@ void	ft_push_first_doc(t_tokken_list **tokken, t_val *val)
 	free(doc_name);
 }
 
-void	ft_first_heredoc(t_tokken_list **tokken, t_val *val)
+void	ft_first_heredoc(t_tokken_list **tokken, t_val **val)
 {
 	t_tokken_list	*head;
 

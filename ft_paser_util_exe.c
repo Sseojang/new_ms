@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:13:15 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/01 19:15:29 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/07 02:24:40 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void	free_path(char **paths)
 	paths = NULL;
 }
 
-void	ft_find_cmd(t_tokken_list *tokken, t_val *val)
+void	ft_find_cmd(t_tokken_list *tokken, t_val **val)
 {
 	while (tokken && ft_strncmp(tokken->content, "|", 1) != 0)
 	{
 		if (tokken->content != NULL && ft_strlen(tokken->content) != 0)
 		{
-			val->cmd = tokken;
+			(*val)->cmd = tokken;
 			return ;
 		}
 		tokken = tokken->next;

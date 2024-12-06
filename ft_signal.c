@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:59:56 by seojang           #+#    #+#             */
-/*   Updated: 2024/11/25 16:49:41 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/07 00:29:42 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	handler_quit(int sig)
 	if (sig == SIGQUIT)
 	{
 		write(1, "Quit (core dumped)\n", 19);
+		signal_flag = 1;
 		return ;
 	}
 }
@@ -54,6 +55,7 @@ void	handler_int(int sig)
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
+		signal_flag = 2;
 		return ;
 	}
 }

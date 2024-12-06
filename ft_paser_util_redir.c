@@ -6,13 +6,13 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:11:47 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/06 15:58:33 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/07 02:24:08 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_test.h"
 
-void	ft_find_redir(t_tokken_list **tokken, t_val *val)
+void	ft_find_redir(t_tokken_list **tokken, t_val **val)
 {
 	t_tokken_list	*lst;
 
@@ -36,7 +36,7 @@ void	ft_find_redir(t_tokken_list **tokken, t_val *val)
 			else if (!ft_strncmp(lst->content, "<<", 2) && ft_strlen(lst->content) == 2)
 			{
 				ft_redir_here(lst, val, tokken);
-				if (val->here_sig == 1)
+				if ((*val)->here_sig == 1)
 					return ;
 			}
 			else if (!ft_strncmp(lst->content, "|", 1))
@@ -46,7 +46,7 @@ void	ft_find_redir(t_tokken_list **tokken, t_val *val)
 	}
 }
 
-void	ft_redir_open(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
+void	ft_redir_open(t_tokken_list *lst, t_val **val, t_tokken_list **tokken)
 {
 	char	*file;
 	t_tokken_list	*head;
@@ -59,9 +59,10 @@ void	ft_redir_open(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	file = ft_strdup(lst->next->content);
 	if (!file || !ft_strncmp(file, "|", 1))
 		error("redir error", 1);
-	val->fd_in = open(file, O_RDONLY);
-	if (val->fd_in < 0)
+	(*val)->fd_in = open(file, O_RDONLY);
+	if ((*val)->fd_in < 0)
 	{
+		free(file);
 		write(1, "input error\n", 12);
 		return ;
 	}
@@ -80,7 +81,7 @@ void	ft_redir_open(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	free(file);
 }
 
-void	ft_redir_out(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
+void	ft_redir_out(t_tokken_list *lst, t_val **val, t_tokken_list **tokken)
 {
 	char	*file;
 	t_tokken_list	*head;
@@ -93,9 +94,9 @@ void	ft_redir_out(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	file = ft_strdup(lst->next->content);
 	if ( !file || !ft_strncmp(file, "|", 1))
 		error("redir error", 1);
-	val->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	(*val)->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	//printf("outfile fd_out = {%d}\n", val->fd_out);
-	if (val->fd_out < 0)
+	if ((*val)->fd_out < 0)
 		error("output error", 1);
 	while ((*tokken) && ft_strncmp((*tokken)->content, ">", 1))
 		(*tokken) = (*tokken)->next;
@@ -112,7 +113,7 @@ void	ft_redir_out(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	free(file);
 }
 
-void	ft_redir_add(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
+void	ft_redir_add(t_tokken_list *lst, t_val **val, t_tokken_list **tokken)
 {
 	char	*file;
 	t_tokken_list	*head;
@@ -125,8 +126,8 @@ void	ft_redir_add(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	file = ft_strdup(lst->next->content);
 	if ( !file || !ft_strncmp(file, "|", 1))
 		error("redir error", 1);
-	val->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (val->fd_out < 0)
+	(*val)->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if ((*val)->fd_out < 0)
 		error("output error", 1);
 	while ((*tokken) && ft_strncmp((*tokken)->content, ">>", 2))
 		(*tokken) = (*tokken)->next;
@@ -143,7 +144,7 @@ void	ft_redir_add(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	free(file);
 }
 
-void	ft_redir_here(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
+void	ft_redir_here(t_tokken_list *lst, t_val **val, t_tokken_list **tokken)
 {
 	char	*file;
 	t_tokken_list	*head;
@@ -159,11 +160,11 @@ void	ft_redir_here(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	file = ft_strdup(lst->next->content);
 	if (!file || !ft_strncmp(file, "|", 1))
 		error("redir error", 1);
-	val->fd_in = open(file, O_RDONLY);
+	(*val)->fd_in = open(file, O_RDONLY);
 	//printf("before heredoc file fd_in = {%d}\n", val->fd_in);
-	if (val->fd_in < 0)
+	if ((*val)->fd_in < 0)
 	{
-		val->here_sig = 1;
+		(*val)->here_sig = 1;
 		free(file);
 		return ;
 	}
