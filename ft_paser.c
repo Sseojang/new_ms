@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:08:50 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/06 15:58:00 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/06 16:57:26 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,10 @@ void	ft_heredoc_change(t_tokken_list **tokken)
 	*tokken = head;
 }
 
-void	ft_paser_manager(t_tokken_list *tokken, char **envp)
+void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val)
 {
 	pid_t	pid;
 	pid_t	pid_here;
-	t_val	val;
 	int pipefd[2] = {-1, -1};
 	int prev_pipe = -1;
 	int status;
@@ -69,13 +68,13 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 		{
 			set_signal_int_ex();
 			signal(SIGINT, handler_here);
-			val.doc_num = 0;
+			val->doc_num = 0;
 			if (!ft_strncmp(tokken->content, "<<", 2))
 			{
-				ft_first_heredoc(&tokken, &val);
+				ft_first_heredoc(&tokken, val);
 			}
 			else
-				ft_heredoc(&tokken, &val);
+				ft_heredoc(&tokken, val);
 			here_flag++;
 			exit(1);
 		}
@@ -105,7 +104,7 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 			pipefd[0] = -1;
 			pipefd[1] = -1;
 		}
-		ft_paser_func(&tokken, &val);
+		ft_paser_func(&tokken, val);
 		//printf("플래그값 {%d}, 파일값{%d}", val.here_flag, val.fd_in);
 		// if (val.here_flag == 1 && val.fd_in < 0)
 		// 	break ;
@@ -117,9 +116,9 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 			error("Fork error", 1);
 		else if (pid == 0)
 		{
-			ft_find_cmd(tokken, &val);
+			ft_find_cmd(tokken, val);
 			set_signal_int_ex();
-			printf("fd in값 {%d} fd out값 {%d} token값 {%s}\n", val.fd_in, val.fd_out, tokken->content);
+			printf("fd in값 {%d} fd out값 {%d} token값 {%s}\n", val->fd_in, val->fd_out, tokken->content);
 			if (prev_pipe != -1)
 			{
 				dup2(prev_pipe, STDIN_FILENO);
@@ -132,7 +131,7 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 			}
 			if (pipefd[0] != -1)
 				close(pipefd[0]);
-			ft_dup(&val, envp, pipefd);
+			ft_dup(val, envp, pipefd);
 		}
 		else
 		{
@@ -142,7 +141,7 @@ void	ft_paser_manager(t_tokken_list *tokken, char **envp)
 			if (pipefd[1] != -1)
 				close(pipefd[1]);
 			prev_pipe = pipefd[0];
-			val.cmd = NULL; //cmd 초기화
+			val->cmd = NULL; //cmd 초기화
 		}
 		while (tokken && tokken->content && ft_strncmp(tokken->content, "|", 1) != 0)
 		{
