@@ -41,6 +41,9 @@ typedef struct s_val
 	char	*heredoc;
 	int		doc_num;
 	int		here_sig;
+	int		exit_code;
+	char	*home;
+	t_tokken_list	*head;
 	t_tokken_list	*cmd;
 }			t_val;
 
@@ -65,8 +68,8 @@ void	ft_lstadd_back(t_tokken_list **lst, t_tokken_list *new);
 void	ft_lstclear(t_tokken_list **lst);
 
 //token
-void	ft_tokenizer(char *line, char **envp);
-void	ft_in_pipe(char *line, char **envp, t_tokken_list **tokken);
+void	ft_tokenizer(char *line, char **envp, t_val *val);
+void	ft_in_pipe(char *line, char **envp, t_tokken_list **tokken, t_val *val);
 char	*ft_alpha_digit(char *line, int *i);
 char	*ft_double_qoute_check(char *line, int *i, char **envp);
 char	*ft_export_ptr(char *line, int *i, char **envp);
@@ -98,7 +101,7 @@ int		is_quote(const char *s);
 //ft_qoute.c
 int		ft_double_qoute(char *line, int i, char **envp);
 int		ft_single_qoute(char *line, int i);
-void	ft_qoute_check(char *line, char **envp);
+void	ft_qoute_check(char *line, char **envp, t_val *val);
 
 //ft_export.c
 void	ft_print_export(char *temp, char **envp);
@@ -110,7 +113,7 @@ char	*find_path(char *argv, const char *env);
 void	ft_val_set(t_val *val);
 void	error(char *s, int num);
 void	execute_cmd(t_tokken_list *tokken, char **envp);
-void	ft_paser_manager(t_tokken_list *tokken, char **envp);
+void	ft_paser_manager(t_tokken_list *tokken, char **envp, t_val *val);
 void	free_path(char **paths);
 
 //redir

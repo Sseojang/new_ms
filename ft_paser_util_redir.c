@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:11:47 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/01 15:59:53 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/06 15:58:33 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	ft_redir_open(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 		(*tokken) = (*tokken)->next;
 	while ((*tokken) && ft_strncmp((*tokken)->content, "|", 1))
 	{
+		free((*tokken)->content);
 		(*tokken)->content = ft_strdup("");
 		(*tokken) = (*tokken)->next;
 		i++;
@@ -76,6 +77,7 @@ void	ft_redir_open(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 			break ;
 	}
 	(*tokken) = head;
+	free(file);
 }
 
 void	ft_redir_out(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
@@ -99,6 +101,7 @@ void	ft_redir_out(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 		(*tokken) = (*tokken)->next;
 	while ((*tokken) && ft_strncmp((*tokken)->content, "|", 1))
 	{
+		free((*tokken)->content);
 		(*tokken)->content = ft_strdup("");
 		(*tokken) = (*tokken)->next;
 		i++;
@@ -106,6 +109,7 @@ void	ft_redir_out(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 			break ;
 	}
 	(*tokken) = head;
+	free(file);
 }
 
 void	ft_redir_add(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
@@ -128,6 +132,7 @@ void	ft_redir_add(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 		(*tokken) = (*tokken)->next;
 	while ((*tokken) && ft_strncmp((*tokken)->content, "|", 1))
 	{
+		free((*tokken)->content);
 		(*tokken)->content = ft_strdup("");
 		(*tokken) = (*tokken)->next;
 		i++;
@@ -135,6 +140,7 @@ void	ft_redir_add(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 			break ;
 	}
 	(*tokken) = head;
+	free(file);
 }
 
 void	ft_redir_here(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
@@ -158,12 +164,14 @@ void	ft_redir_here(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 	if (val->fd_in < 0)
 	{
 		val->here_sig = 1;
+		free(file);
 		return ;
 	}
 	while ((*tokken) && ft_strncmp((*tokken)->content, "<<", 2))
 		(*tokken) = (*tokken)->next;
 	while ((*tokken) && ft_strncmp((*tokken)->content, "|", 1))
 	{
+		free((*tokken)->content);
 		(*tokken)->content = ft_strdup("");
 		(*tokken) = (*tokken)->next;
 		i++;
@@ -171,5 +179,6 @@ void	ft_redir_here(t_tokken_list *lst, t_val *val, t_tokken_list **tokken)
 			break ;
 	}
 	unlink(file);
+	free(file);
 	(*tokken) = head;
 }

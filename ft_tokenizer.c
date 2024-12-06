@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 17:25:52 by seojang           #+#    #+#             */
-/*   Updated: 2024/11/25 21:48:44 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/06 16:53:21 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,9 +243,11 @@ char	*ft_option(char	*line, int *i)
 {
 	char	*ptr;
 	int		first_num;
+	char	*temp;
 
 	++(*i);
 	ptr = NULL;
+	temp = NULL;
 	first_num = (*i);
 	while (line[*i])
 	{
@@ -256,7 +258,9 @@ char	*ft_option(char	*line, int *i)
 		else
 			(*i)++;
 	}
-	ptr = ft_strjoin(ft_strdup("-"),ft_substr(line, first_num, ((*i) + 1) - first_num));
+	temp = ft_substr(line, first_num, ((*i) + 1) - first_num);
+	ptr = ft_strjoin(ft_strdup("-"), temp);
+	free(temp);
 	return (ptr);
 }
 
@@ -269,11 +273,12 @@ char	*ft_space(int *i)
 	return (ptr);
 }
 
-void	ft_in_pipe(char *line, char **envp, t_tokken_list **tokken)
+void	ft_in_pipe(char *line, char **envp, t_tokken_list **tokken, t_val *val)
 {
 	int		i;
 
 	i = 0;
+	(void)val;
 	while (line[i])
 	{
 		if (line[i] == '<' || line[i] == '>')
@@ -299,23 +304,15 @@ void	ft_in_pipe(char *line, char **envp, t_tokken_list **tokken)
 	}
 }
 
-void	ft_tokenizer(char *line, char **envp)
+void	ft_tokenizer(char *line, char **envp, t_val *val)
 {
 	t_tokken_list	*tokken;
-	t_tokken_list	*lst;
 	
 	tokken = NULL;
-	ft_qoute_check(line, envp);
+	ft_qoute_check(line, envp, val);
 	write(1, "\n", 1);
-	ft_in_pipe(line, envp, &tokken);
-
-	int	i = 0;
-	lst = tokken;
-	while (lst)
-	{
-		printf("ptr[%d] = %s\n", i, lst->content);
-		lst = lst->next;
-		i++;
-	}
-	ft_paser_manager(tokken, envp);
+	ft_in_pipe(line, envp, &tokken, val);
+//-----------------------------------------------
+	ft_paser_manager(tokken, envp, val);
+	ft_lstclear(&tokken);
 }

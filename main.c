@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:02:13 by seojang           #+#    #+#             */
-/*   Updated: 2024/11/25 21:45:51 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/06 16:48:33 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	handler_fork(int sig)
 int main(int ac, char **av, char **envp)
 {
 	char	*line;
+	t_val	val;
 
 	line = NULL;
 	(void)ac;
@@ -64,7 +65,7 @@ int main(int ac, char **av, char **envp)
 		if (line)
 		{
 			add_history(line);
-			ft_tokenizer(line, envp);
+			ft_tokenizer(line, envp, &val);
 			free(line);
 			line = NULL;
 		}
