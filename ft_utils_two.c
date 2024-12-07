@@ -1,28 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_libft.c                                         :+:      :+:    :+:   */
+/*   ft_utils_two.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/09 18:47:45 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/07 23:16:17 by seojang          ###   ########.fr       */
+/*   Created: 2024/12/07 23:17:15 by seojang           #+#    #+#             */
+/*   Updated: 2024/12/07 23:17:37 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_test.h"
 
-int	ft_is_alpha(char c)
+size_t	ft_strlen(char const *str)
 {
-	if ((c >= 64 && c <= 90) || (c >= 97 && c <= 122) \
-	|| c == 46 || c == 47 || c == '=' || c == '~')
-		return (1);
-	return (0);
+	size_t	len;
+
+	len = 0;
+	while (*(str + len))
+		len++;
+	return (len);
 }
 
-int	ft_is_digit(char c)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	if ((c >= 48) && (c <= 57))
-		return (1);
-	return (0);
+	size_t	len;
+
+	len = 0;
+	while (*src)
+	{
+		if (len + 1 < size)
+			*dst++ = *src;
+		src++;
+		len++;
+	}
+	if (size > 0)
+		*dst = '\0';
+	return (len);
 }

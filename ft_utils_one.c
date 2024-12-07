@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*   ft_utils_one.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:02:06 by seojang           #+#    #+#             */
-/*   Updated: 2024/11/22 23:17:06 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/07 23:17:33 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_test.h"
-
-size_t	ft_strlen(char const *str)
-{
-	size_t	len;
-
-	len = 0;
-	while (*(str + len))
-		len++;
-	return (len);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	len;
-
-	len = 0;
-	while (*src)
-	{
-		if (len + 1 < size)
-			*dst++ = *src;
-		src++;
-		len++;
-	}
-	if (size > 0)
-		*dst = '\0';
-	return (len);
-}
 
 char	*ft_strjoin(char *s1, char *s2)
 {

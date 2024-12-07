@@ -6,7 +6,7 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 17:25:52 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/07 02:02:45 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/08 00:19:44 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,18 +200,14 @@ char	*ft_alpha_digit(char *line, int *i)
 	while (line[*i])
 	{
 		if (ft_is_alpha(line[*i]) || ft_is_digit(line[*i]) || line[*i] == '-')
-		{
 			(*i)++;
-		}
 		else if (line[*i] == 34 && !d_qoute_flag)
 		{
 			d_qoute_flag = 1;
 			(*i)++;
 		}
 		else if (d_qoute_flag && line[*i] == ' ')
-		{
 			(*i)++;
-		}
 		else if (d_qoute_flag && line[*i] == 34)
 		{
 			d_qoute_flag = 0;
@@ -223,9 +219,7 @@ char	*ft_alpha_digit(char *line, int *i)
 			(*i)++;
 		}
 		else if (s_qoute_flag && line[*i] == ' ')
-		{
 			(*i)++;
-		}
 		else if (s_qoute_flag && line[*i] == 39)
 		{
 			s_qoute_flag = 0;
@@ -273,7 +267,7 @@ char	*ft_space(int *i)
 	return (ptr);
 }
 
-void	ft_in_pipe(char *line, char **envp, t_tokken_list **tokken, t_val *val)
+void	ft_in_pipe(char *line, char **envp, t_tlist **tokken, t_val *val)
 {
 	int		i;
 
@@ -306,13 +300,13 @@ void	ft_in_pipe(char *line, char **envp, t_tokken_list **tokken, t_val *val)
 
 void	ft_tokenizer(char *line, char **envp, t_val *val)
 {
-	t_tokken_list	*tokken;
+	t_tlist	*tokken;
 	
 	tokken = NULL;
 	ft_qoute_check(line, envp, val);
 	write(1, "\n", 1);
 	ft_in_pipe(line, envp, &tokken, val);
-	t_tokken_list *lst = tokken;
+	t_tlist *lst = tokken;
 	int i = 0;
 	while (lst)
 	{
@@ -320,6 +314,7 @@ void	ft_tokenizer(char *line, char **envp, t_val *val)
 		lst = lst->next;
 	}
 //-----------------------------------------------
+	val->exit_code = 0;
 	ft_paser_manager(tokken, envp, &val);
 	ft_lstclear(&tokken);
 	printf("{%d}\n", val->exit_code);

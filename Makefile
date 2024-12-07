@@ -6,7 +6,7 @@
 #    By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/15 09:48:53 by seojang           #+#    #+#              #
-#    Updated: 2024/12/07 00:43:26 by seojang          ###   ########.fr        #
+#    Updated: 2024/12/07 23:47:01 by seojang          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,12 +27,20 @@ SRC = main.c \
 	ft_paser.c \
 	ft_paser_util_pipe.c \
 	ft_paser_util_redir.c \
+	ft_paser_util_redir_norm.c \
 	ft_paser_util_exe.c \
-	ft_paser_util_heredoc.c \
+	ft_paser_util_exe_norm.c \
+	ft_paser_util_here.c \
+	ft_paser_util_here_first.c \
+	ft_paser_util_here_ex.c \
 	ft_paser_utils.c \
+	ft_paser_man_util.c \
+	ft_paser_here_util.c \
 	ft_signal.c \
+	ft_signal_util.c \
 	ft_itoa.c \
-	ft_utils.c
+	ft_utils_one.c \
+	ft_utils_two.c
 
 HEADER = ms_test.h
 

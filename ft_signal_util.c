@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_libft.c                                         :+:      :+:    :+:   */
+/*   ft_signal_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/09 18:47:45 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/07 23:16:17 by seojang          ###   ########.fr       */
+/*   Created: 2024/12/07 20:35:12 by seojang           #+#    #+#             */
+/*   Updated: 2024/12/07 21:39:01 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_test.h"
 
-int	ft_is_alpha(char c)
+void	handler_quit(int sig)
 {
-	if ((c >= 64 && c <= 90) || (c >= 97 && c <= 122) \
-	|| c == 46 || c == 47 || c == '=' || c == '~')
-		return (1);
-	return (0);
+	if (sig == SIGQUIT)
+	{
+		write(1, "Quit (core dumped)\n", 19);
+		g_signal_flag = 1;
+		return ;
+	}
 }
 
-int	ft_is_digit(char c)
+void	handler_int(int sig)
 {
-	if ((c >= 48) && (c <= 57))
-		return (1);
-	return (0);
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		g_signal_flag = 2;
+		return ;
+	}
 }

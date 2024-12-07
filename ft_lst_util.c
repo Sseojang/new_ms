@@ -6,17 +6,17 @@
 /*   By: seojang <seojang@student.42gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:47:34 by seojang           #+#    #+#             */
-/*   Updated: 2024/12/01 17:05:53 by seojang          ###   ########.fr       */
+/*   Updated: 2024/12/08 00:19:21 by seojang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_test.h"
 
-t_tokken_list	*ft_lstnew(char *content)
+t_tlist	*ft_lstnew(char *content)
 {
-	t_tokken_list	*p;
+	t_tlist	*p;
 
-	p = (t_tokken_list *)malloc(sizeof(t_tokken_list));
+	p = (t_tlist *)malloc(sizeof(t_tlist));
 	if (!p)
 		return (NULL);
 	p->content = content;
@@ -24,9 +24,9 @@ t_tokken_list	*ft_lstnew(char *content)
 	return (p);
 }
 
-void	ft_lstadd_back(t_tokken_list **lst, t_tokken_list *new)
+void	ft_lstadd_back(t_tlist **lst, t_tlist *new)
 {
-	t_tokken_list	*temp;
+	t_tlist	*temp;
 
 	if (!*lst)
 	{
@@ -39,9 +39,9 @@ void	ft_lstadd_back(t_tokken_list **lst, t_tokken_list *new)
 	temp->next = new;
 }
 
-void	ft_lstclear(t_tokken_list **lst)
+void	ft_lstclear(t_tlist **lst)
 {
-	t_tokken_list	*temp;
+	t_tlist	*temp;
 
 	while (*lst)
 	{
